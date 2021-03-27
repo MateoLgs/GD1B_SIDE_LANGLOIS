@@ -1,0 +1,1736 @@
+<!doctype html> 
+<html lang="en"> 
+<head> 
+    <meta charset="UTF-8" />
+    <title>Making your first Phaser 3 Game - Part 4</title>
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.11.0/dist/phaser.js"></script>
+    <style type="text/css">
+        body {
+            margin: 0;
+        }
+    </style>
+</head>
+ <body>
+
+<script type="text/javascript">
+     
+
+    
+    
+class Menu extends Phaser.Scene {
+
+    constructor () {
+        super('Menu');
+    }
+        preload(){
+              this.load.image('Menu', 'assets/menuScreen.jpg');
+              this.load.image('menuLevel1Button', 'assets/menuLevel1Button.png');
+              this.load.image('menuLevel2Button', 'assets/menuLevel2Button.png');
+              this.load.image('switchOn', 'assets/switchOn.png');
+              this.load.image('switchOff', 'assets/switchOff.png');
+        }
+    create() {
+
+        var menuBackground = this.add.image(600, 400, 'Menu');
+        var menuLevel1Button = this.add.image(400, 400, 'menuLevel1Button').setScale(0.5).setInteractive();
+        var menuLevel2Button = this.add.image(800, 400, 'menuLevel2Button').setScale(0.5).setInteractive();
+        var menuHardcoreModeOn = this.add.image(1200, 50, 'switchOn').setScale(0.125).setInteractive().setAlpha(0);
+        var menuHardcoreModeOff = this.add.image(1200, 50, 'switchOff').setScale(0.125).setInteractive();
+     
+  menuHardcoreModeOff.on('pointerdown', () => {
+      menuHardcoreModeOn.setAlpha(1)
+      menuHardcoreModeOff.setAlpha(0)
+      hardcoreMode="on";
+        })  
+  
+        
+    menuHardcoreModeOn.on('pointerdown', () => {
+      menuHardcoreModeOff.setAlpha(1)
+      menuHardcoreModeOn.setAlpha(0)
+      hardcoreMode="off";
+        })   
+        
+  menuLevel1Button.on('pointerdown', () => {
+      this.choixMenulevel1Button();
+        }) 
+        
+  menuLevel2Button.on('pointerdown', () => {
+      this.choixMenulevel2Button();
+        }) 
+
+
+    }
+    choixMenulevel1Button(){
+              level="level1"
+      this.scene.start('Jeu');
+    }
+
+    choixMenulevel2Button(){
+        level="tutoriel"
+      this.scene.start('Jeu');
+    }
+    
+    
+    
+}
+       
+       
+
+class Jeu extends Phaser.Scene{
+      constructor () {
+        super('Jeu');
+      }
+
+  updateFroid(){
+        if(froid==3){
+
+            froid1.destroy();
+            froid2.destroy();
+            froid3.destroy();
+
+       }
+       if(froid==2){
+
+            froid1.destroy();
+            froid2.destroy();
+            froid3.destroy();
+            froid1 = this.physics.add.sprite(500, 180, 'froid').setScrollFactor(0).setScale(0.1).setDepth(1);
+       }
+        if(froid==1){
+
+            froid1.destroy();
+            froid2.destroy();
+            froid3.destroy();
+            froid1 = this.physics.add.sprite(500, 180, 'froid').setScrollFactor(0).setScale(0.1).setDepth(1);
+            froid2 = this.physics.add.sprite(600, 180, 'froid').setScrollFactor(0).setScale(0.1).setDepth(1);
+       }
+   }
+    
+  lancerSnowballYeti(yeti){
+
+      if(hardcoreMode=="off"){
+
+                for (const yeti of this.yetis.children.entries) {
+              var snowball = snowballs.create(yeti.x, yeti.y, 'snowball');
+        if(player.x<yeti.x){
+        snowball.setVelocity(-200, -400);
+        snowball.setGravityY(1000);
+        }
+        else if(player.x>yeti.x){
+        snowball.setVelocity(200, -400);
+        snowball.setGravity(1000);
+        }
+      }
+      }
+      
+        if(hardcoreMode=="on"){
+                   
+      for (const yeti of this.yetis.children.entries) {
+              var snowball = snowballs.create(yeti.x, yeti.y, 'snowball');
+        if(player.x<yeti.x){
+        snowball.setVelocity(Phaser.Math.FloatBetween(-200, -400), Phaser.Math.FloatBetween(-200, -400));
+        snowball.setGravityY(1000);
+        }
+        else if(player.x>yeti.x){
+        snowball.setVelocity(Phaser.Math.FloatBetween(200, 400), Phaser.Math.FloatBetween(-200, -400));
+        snowball.setGravityY(1000);
+        }
+      }
+      }
+  }
+    
+  killSnowman(snowman, fireball){
+      snowman.destroy();
+      fireball.destroy();
+  }   
+  killYeti(snowman, fireball){
+      snowman.destroy();
+      fireball.destroy();
+  }     
+   
+  lancerfireball(player){
+
+        console.log("lancerFireball")
+         var bomb = bombs.create(player.x, player.y-15, 'fireball');
+        bomb.setBounce(1);
+        bomb.setGravityY(2000)
+    
+        var directionFireballPlayer = Math.round(Phaser.Math.Between(0,1))
+        
+        if(keyQ.isDown){
+            directionFireballPlayer=-400;
+        }
+        else if(keyD.isDown){
+            directionFireballPlayer=400;
+        }
+        else if(keyD.isUp && keyQ.isUp && keyZ.isUp && directionFireballPlayer==1){
+            directionFireballPlayer=400;
+        }
+        else if(keyD.isUp && keyQ.isUp && keyZ.isUp && directionFireballPlayer==0){
+            directionFireballPlayer=-400;
+        }
+    
+    
+        
+        if(cursors.left.isDown){
+            directionFireballPlayer=-400;
+        }
+        else if(cursors.right.isDown){
+            directionFireballPlayer=400;
+        }
+        else if(cursors.left.isUp && cursors.right.isUp && cursors.up.isUp  && directionFireballPlayer==1){
+            directionFireballPlayer=400;
+        }
+        else if(cursors.left.isUp && cursors.right.isUp && cursors.up.isUp && directionFireballPlayer==0){
+            directionFireballPlayer=-400;
+        }
+        
+      if(playerDirection=="right"){
+        bomb.setVelocity(400, 200);
+      }
+      else if(playerDirection=="left"){
+        bomb.setVelocity(-400, 200);
+      }
+    
+      }
+ 
+  destroyFireball(bomb){
+        if(bomb.body.blocked.down==false && bomb.body.blocked.up==false){
+          bomb.destroy();
+        }
+
+
+}  
+
+  destroySnowball(snowball){
+    snowball.destroy();
+}
+    
+  destroyPlatformFake(platformFake){
+      platformFake.destroy();
+     
+      //platformFake.setAlpha(0.2)
+      //console.log("destroy")
+  }
+    
+  showPlatformInvisible(platformInvisble){
+      platformInvisble.setAlpha(1);
+            if(player.body.blocked.down || player.body.touching.down){
+       
+      }
+  }    
+   
+  showPicsInvisible(PicsInvisible){
+         
+
+    if(playerInvincible==false){
+ 
+        this.death();
+
+      }
+
+      PicsInvisible.setAlpha(1);
+  } 
+    
+  collectHealthPlayer(powerUpHealth){
+    powerUpHealth.destroy();
+
+    //  Add and update the score
+    froid -= 1;
+	this.updateFroid();
+ 
+}
+    
+  collectCoin(coin){
+   /* healthAmount-=10
+     Health.innerHTML=healthAmount*/
+    coin.destroy();
+    totalCoins+=1;
+    textPieces.destroy();
+    textPieces = this.add.text(280, 200,  totalCoins,{ fill:'#fff', size:200}).setScrollFactor(0).setDepth(1);  
+      //console.log(totalCoins);
+      
+}
+    
+  collectPowerUpFireball(powerUpFireball){
+    console.log("pickupfireball")
+    powerUpFireball.destroy();
+    /*if(fireballPowerUpActive==true){
+        machineGunFireballUses+=1;
+    }*/
+    fireballPowerUpActive= true;
+}
+    
+  contactDrapeau(){
+    
+    if(totalCoins>14){
+    console.log(level)   
+    totalCoins=0;
+
+    if(level=="level4"){
+        this.scene.start("Victoire");
+    } 
+    if(level=="level3"){
+        level="level4"
+
+        this.scene.restart();
+    } 
+    if(level=="level2"){
+        level="level3"
+ 
+        this.scene.restart();
+    }  
+    if(level=="level1"){
+        level="level2"
+           
+        this.scene.restart();
+    }    
+
+    }
+    else {
+        console.log('Vous n\'avez que ' + totalCoins +' pièces')
+    }
+}    
+
+  degatSnowmanJoueur(snowman){
+    snowman.destroy();
+      if(hardcoreMode=="on"){
+          this.death();
+      }
+      if(playerInvincible==false && hardcoreMode=="off"){
+        froid+=1;
+        this.updateFroid();
+      }
+             this.bounce();
+
+      
+  }
+    
+
+  contactYetiJoueur(yeti){
+    this.bounce();
+       yeti.destroy();
+
+       if(hardcoreMode=="on"){
+          this.death();
+      }
+      if(playerInvincible==false && hardcoreMode=="off"){
+        froid+=1;
+        this.updateFroid();
+      }
+  
+  }
+    
+  bounce(){
+     playerCanResetVelocity=false
+        this.input.enabled = false;
+        keyD.reset();
+        keyQ.reset();
+        keyZ.reset();  
+      this.playerGoInvincible();
+            if(player.body.touching.right){
+           player.setVelocityX(-250);
+      }
+      else if(player.body.touching.down){
+           player.setVelocityY(-250);
+      }
+      else if(player.body.touching.left){
+           player.setVelocityX(+250);
+      }
+
+     
+        this.time.delayedCall(400, this.inputEnabled, null, this);   
+  }
+    
+  bouncePlatformMontagne(){
+       
+
+ 
+    if(player.body.blocked.right && player.body.blocked.down == false){
+        if(keyZ.isDown){
+             playerCanResetVelocity=false
+        this.input.enabled = false;
+        keyD.reset();
+        keyQ.reset();
+        keyZ.reset(); 
+
+           player.setVelocityX(-150);
+           player.setVelocityY(-350);
+        }
+
+      }
+      if(player.body.blocked.left && player.body.blocked.down == false){
+        if(keyZ.isDown){
+             playerCanResetVelocity=false
+        this.input.enabled = false;
+        keyD.reset();
+        keyQ.reset();
+        keyZ.reset(); 
+
+           player.setVelocityX(150);
+           player.setVelocityY(-350);
+        }
+
+      }
+
+        this.time.delayedCall(400, this.inputEnabled, null, this);  
+        this.time.delayedCall(800, this.canResetVelocity, null, this);  
+
+  }    
+    
+  inputEnabled(){
+       this.input.enabled = true;
+  }
+
+  canResetVelocity(){
+    playerCanResetVelocity=true
+  }
+
+    
+  degatSnowballJoueur(player, snowball){
+  snowball.disableBody(true, true);
+      if(hardcoreMode=="on" ){
+          this.death();
+      }
+    if(playerInvincible==false && hardcoreMode=="off"){
+     froid+=1;
+        this.updateFroid();
+
+
+
+        this.playerGoInvincible();
+    }
+      
+
+  }
+    
+  hitBomb (player, bomb){
+    death();
+}
+
+  playerInWater(){
+      //standing=false
+      gravity=200
+      runSpeed=0.25
+      playerInWater=true
+  }
+    
+  playerInWaterTop(){
+      /*standing=true
+      console.log("playerinwatertop")*/
+      runSpeed=1
+      gravity=1000
+      playerInWater=false
+      
+  }
+    
+  setSpeedPlatform (player, platform) {
+    playerCanResetVelocity=true 
+    player.setGravityY(gravity)
+     if(playerInWater==false){
+     runSpeed = 1;
+     }
+     onPlatform = "platform"
+      if(player.body.blocked.down || player.body.touching.down){
+       standing=true
+
+      }
+}
+    
+  setSpeedPlatformSnow (player, platform) {
+    playerCanResetVelocity=true
+        onPlatform = "snow"
+     runSpeed = 0.25;
+      if(player.body.blocked.down || player.body.touching.down){
+       standing=true
+      }
+}
+    
+  setSpeedPlatformIce (player, platform) {
+    if(player.body.blocked.down || player.body.touching.down){
+       standing=true
+      }
+      playerCanResetVelocity=false
+      onPlatform="ice"
+        //player.body.acceleration.y=10000;
+   
+}
+    
+  goRight(){
+    if(onPlatform!="ice"){
+    if(keyQ.isDown && onPlatform != "ice"){
+        player.setVelocityX(0);
+        player.anims.play('idle').setFlipX(false);
+    }
+      else if(standing==true){    
+      player.play('run', true).setFlipX(false);
+      player.setVelocityX(250*runSpeed);
+      playerDirection="right"
+      }
+      else if(standing==false){
+      player.play('jump', true).setFlipX(false);
+      player.setVelocityX(250*runSpeed);
+      playerDirection="right"
+      }
+    }
+
+          if(onPlatform=="ice"){
+   
+                player.setAccelerationX(200)
+                player.play('run', true).setFlipX(false);
+                playerDirection="right"
+        }
+   
+}
+ 
+  goLeft(){
+      if(onPlatform!="ice"){
+      if(standing==true){    
+      player.play('run', true).setFlipX(true);
+      playerDirection="left"
+          player.setVelocityX(-250*runSpeed);
+      }
+      else if(standing==false){
+      player.play('jump', true).setFlipX(true);
+            playerDirection="left"
+          player.setVelocityX(-250*runSpeed);
+      }
+    }
+    if(onPlatform=="ice"){
+           
+                player.setAccelerationX(-200)
+                player.play('run', true).setFlipX(true);
+                playerDirection="left"
+        }
+}
+ 
+  jump(){
+
+      
+      if(gravity==1000){
+         
+    player.setVelocityY(-500);
+      standing=false;
+       player.play('jump', true);
+      if(keyQ.isUp && keyD.isUp && onPlatform !="ice"){
+        player.setVelocityX(0)
+      }
+      }
+        if(gravity==100){
+            
+    player.setVelocityY(-100);
+      standing=false;
+       player.play('jump', true);
+      if(keyQ.isUp && keyD.isUp && onPlatform !="ice"){
+          player.setVelocityX(0)
+      }
+      }
+}
+    
+  playerPlatformMoving(player, platformMoving){
+      if(player.body.blocked.down){
+ 
+      if(platformMoving.direction=='LEFT'){
+         this.goLeft()
+          //  player.setVelocityX(-100);
+      }
+      if(platformMoving.direction=='RIGHT'){
+          player.setVelocityX(100);
+      }
+      }
+  }
+    
+  playerGoInvincible(){
+            playerInvincible=true;
+            this.invicibleAfterHitAlpha0;
+            this.time.delayedCall(100, this.invicibleAfterHitAlpha1, null, this);
+            this.time.delayedCall(200, this.invicibleAfterHitAlpha0, null, this);
+            this.time.delayedCall(300, this.invicibleAfterHitAlpha1, null, this);
+            this.time.delayedCall(400, this.invicibleAfterHitAlpha0, null, this);
+            this.time.delayedCall(500, this.invicibleAfterHitAlpha1, null, this);           
+            this.time.delayedCall(600, this.invicibleAfterHitAlpha0, null, this);
+            this.time.delayedCall(700, this.invicibleAfterHitAlpha1, null, this);
+            this.time.delayedCall(800, this.invicibleAfterHitAlpha0, null, this);
+            this.time.delayedCall(900, this.invicibleAfterHitAlpha1, null, this);
+            this.time.delayedCall(1000, this.invisibleOff, null, this);
+
+      
+  }
+
+  invisibleOff(){
+      playerInvincible=false;
+      player.setTint(0xffffff)
+  }
+    
+  invicibleAfterHitAlpha0(){
+      player.setAlpha(0);
+  }
+    
+  invicibleAfterHitAlpha1(){
+      player.setAlpha(1);
+      player.setTint(0xff0000)
+  }
+    
+  destroyFireballSnowball(bomb, snowball){
+      bomb.destroy();
+      snowball.destroy();
+  }
+    
+  killGoomba() {
+     console.log("goomba die")
+    for (const goomba of this.goombas.children.entries) {
+        if (goomba.body.touching.up) {
+            goomba.isDed = true;
+            goomba.play('goombaDie', true);
+            goomba.on('animationcomplete', () => goomba.destroy());
+
+            increaseScore(.5);
+
+            this.scene.player.sprite.setVelocity(0, -350);
+            this.scene.player.sprite.play('jump');
+        };
+    }
+}
+    
+  death(){
+      
+      console.log("Death")
+      this.input.keyboard.shutdown();
+        player.setVelocityX(0);
+        player.play('die', true);
+            player.setTint(0xff0000)
+      this.physics.pause();
+        keyD.reset();
+        keyQ.reset();
+        keyZ.reset(); 
+      this.time.delayedCall(1000, this.mort, null, this);
+
+    }
+
+  mort(){
+         
+    viesRestantes-=1;
+  
+    if(viesRestantes>0){
+   player.setVelocityX(0);
+     this.scene.start('Death');
+    }
+    if(viesRestantes==0){
+    this.scene.start('GameOver');
+    } 
+}
+    
+  playerEscalierDroit(){
+      if(keyD.isDown){
+                if(player.body.blocked.down || player.body.touching.down){
+       standing=true
+      }
+                player.play('run', true);
+          player.setVelocityY(-250)
+      }
+  }
+    
+  playerEscalierGauche(){
+      if(keyQ.isDown){
+                if(player.body.blocked.down || player.body.touching.down){
+       standing=true
+      }
+      player.play('run', true).setFlipX(true);
+          player.setVelocityY(-250)
+      }
+  }
+
+  preload (){
+
+  
+    var powerUpSnow = this.load.image('powerupFireball', 'assets/powerupFireball.png');
+    var powerUpHealth = this.load.image('powerUpHealth', 'assets/powerUpHealth.png');
+    var platformFake = this.load.image('platformFake', 'assets/platformFakeTile.png');
+    var platformFalling = this.load.image('platformFalling', 'assets/platformFakeTile.png');
+    var platformInvisible = this.load.image('platformInvisible', 'assets/platformFakeTile.png');
+    var platformMoving = this.load.image('platformMoving', 'assets/platformFakeTile.png');
+    var picsInvisible = this.load.image('picsInvisible', 'assets/picsInvisible.png');
+    this.load.image('fireball', 'assets/fireball.png');
+    this.load.image('coin', 'assets/cles.png');
+    this.load.image('snowball', 'assets/snowball.png');
+    this.load.image('yeti', 'assets/yeti1.png');
+    this.load.image('bomb', 'assets/bomb.png');
+    //this.load.image('sky', 'assets/sky.png');
+    this.load.image('flag', 'assets/igloo.png');
+    this.load.image('snowman', 'assets/snowman.png');
+   // this.load.image('ground', 'assets/platform.png');
+    this.load.image('life', 'assets/life.png')
+    this.load.image('froid', 'assets/froid.png')
+   // this.load.image('health', 'assets/star.png', { width: 10,  height: 20,});
+    this.load.image('snowstorm', 'assets/snowstorm.png');
+    this.load.image('water', 'assets/water.png');
+    //this.load.spritesheet('dude1', 'assets/dude1.png', { frameWidth: 32, frameHeight: 48 });
+    
+    
+    
+    
+     this.load.image('tiles', './assets/tileset.png');
+     this.load.atlas('atlas', 'assets/mario-atlas.png', 'assets/mario-atlas.json');
+
+      
+
+     this.load.tilemapTiledJSON('tutoriel', './assets/tutoriel.json');
+     this.load.tilemapTiledJSON('level1', './assets/level1.json');
+     this.load.tilemapTiledJSON('level2', './assets/level2.json');
+     this.load.tilemapTiledJSON('level3', './assets/level3.json');
+     this.load.tilemapTiledJSON('level4', './assets/level4.json');
+   
+
+}
+
+  create (){
+   if(level=="tutoriel"){
+           this.map = this.make.tilemap({ key: 'tutoriel' });
+       playerInvincible=true;
+      }
+     if(level=="level1"){
+           this.map = this.make.tilemap({ key: 'level1' });
+      }
+      if(level=="level2"){
+         this.map = this.make.tilemap({ key: 'level2' });
+      }     
+      if(level=="level3"){
+           this.map = this.make.tilemap({ key: 'level3' });
+      }
+      if(level=="level4"){
+         this.map = this.make.tilemap({ key: 'level4' });
+      }
+
+    
+    this.tileset = this.map.addTilesetImage('tileset', 'tiles');
+    var background = this.map.createDynamicLayer('background', this.tileset, 0, 0)
+    var platform = this.map.createDynamicLayer('platform', this.tileset, 0, 0);
+    var platformEscalierDroit = this.map.createDynamicLayer('platformEscalierDroit', this.tileset, 0, 0);
+    var platformEscalierGauche = this.map.createDynamicLayer('platformEscalierGauche', this.tileset, 0, 0);
+    var platformMontagne = this.map.createDynamicLayer('platformMontagne', this.tileset, 0, 0);
+    var platformSnow = this.map.createDynamicLayer('platformSnow', this.tileset, 0, 0);
+    var platformIce = this.map.createDynamicLayer('platformIce', this.tileset, 0, 0);
+    var pics = this.map.createDynamicLayer('pics', this.tileset, 0, 0);
+    //const texteTuto = this.map.getObjectLayer('tutoTexte').objects;
+    
+      
+   platform.setCollisionByExclusion(-1, true);
+   pics.setCollisionByExclusion(-1, true);
+   platformEscalierDroit.setCollisionByExclusion(-1, true);
+   platformEscalierGauche.setCollisionByExclusion(-1, true);
+   platformMontagne.setCollisionByExclusion(-1, true);
+   platformSnow.setCollisionByExclusion(-1, true);
+   platformIce.setCollisionByExclusion(-1, true);
+ 
+
+      
+      
+    /*  this.input.gamepad.on('down', function (pad, button, index) {
+        return;
+    }),*/
+      
+  
+      /////////////////////////////////////////
+      /////////////PLAYER//////////////////////
+
+    this.add.text(280, 170,  viesRestantes,{ fill:'#fff', size:200}).setScrollFactor(0).setDepth(1);  
+    var life = this.physics.add.sprite(320, 180, 'life').setScrollFactor(0).setScale(0.05).setDepth(1);
+      
+    textPieces = this.add.text(280, 200,  totalCoins,{ fill:'#fff', size:200}).setScrollFactor(0).setDepth(1);  
+    var pieces = this.physics.add.sprite(320, 210, 'coin').setScrollFactor(0).setScale(0.08).setDepth(1);
+    if(hardcoreMode=="off"){    
+    froid1 = this.physics.add.sprite(500, 180, 'froid').setScrollFactor(0).setScale(0.1).setDepth(1);
+    froid2 = this.physics.add.sprite(600, 180, 'froid').setScrollFactor(0).setScale(0.1).setDepth(1);
+    froid3 = this.physics.add.sprite(700, 180, 'froid').setScrollFactor(0).setScale(0.1).setDepth(1);
+    }
+    player = this.physics.add.sprite(32, 160, 'atlas').setScale(1.5);
+    player.setGravityY(1000)
+    //console.log("test")
+    player.setCollideWorldBounds(false);
+    this.anims.create({
+        key: 'run',
+        frames: this.anims.generateFrameNames('atlas', {
+            prefix: 'mario-atlas_',
+            start: 1,
+            end: 3,
+        }),
+        frameRate: 10,
+        repeat: -1
+    });
+
+    this.anims.create({
+        key: 'idle',
+        frames: [{ key: 'atlas', frame: 'mario-atlas_0' }],
+        frameRate: 10
+    });
+
+    this.anims.create({
+        key: 'jump',
+        frames: [{ key: 'atlas', frame: 'mario-atlas_4' }],
+        frameRate: 10
+    });
+
+    this.anims.create({
+        key: 'die',
+        frames: [{ key: 'atlas', frame: 'mario-atlas_5' }],
+        frameRate: 10
+    });
+ 
+
+      this.physics.add.collider(player, platformEscalierDroit, this.playerEscalierDroit, null, this);
+      this.physics.add.collider(player, platformEscalierGauche, this.playerEscalierGauche, null, this);
+      this.physics.add.collider(player, pics, this.death, null, this);
+     
+
+     //////////////////////////////////////////////
+      ///////////////////////////////////////////////
+      
+      
+      
+
+      
+      
+      
+      
+   /*   
+    var snowstorm = this.physics.add.sprite(-900, 0, 'snowstorm').setOrigin(0, 0);
+      if(hardcoreMode=="off"){
+        snowstorm.body.velocity.x=10;
+      }
+      if(hardcoreMode=="on"){
+        snowstorm.body.velocity.x=17;
+      }
+  
+    snowstorm.body.allowGravity = false*/
+
+   
+      
+      
+      
+    this.cameras.main.zoom = 1.75;
+    //this.cameras.main.zoom = 0.25;
+  
+    this.cursors = this.input.keyboard.createCursorKeys();
+    
+
+        //this.cameras.main.startFollow(player, true, 1, 0, 0, 0);  
+ 
+      
+    this.cameras.main
+        .setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels)
+        .startFollow(player);
+    
+    
+    ///////////////////////////////////////
+    ////////////Goomba////////////////////
+      
+      
+      this.anims.create({
+    key: 'goombaRun',
+    frames: this.anims.generateFrameNames('atlas', {
+        prefix: 'mario-atlas_',
+        start: 11,
+        end: 12,
+    }),
+    frameRate: 15,
+    repeat: -1
+});
+
+this.anims.create({
+    key: 'goombaDie',
+    frames: [{ key: 'atlas', frame: 'mario-atlas_10' }],
+    frameRate: 10,
+    hideOnComplete: true
+});
+      
+      
+      
+
+     this.goombas = this.physics.add.group({
+         allowGravity: true,
+         immovable: true
+     }); 
+   
+     const goombaObjects = this.map.getObjectLayer('goomba').objects;
+
+
+    for (const goomba of goombaObjects) {
+    this.goombas.create(goomba.x, goomba.y-11, 'atlas')
+        .setOrigin(0.5,0.5)
+        .setDepth(-1)
+        .setScale(1.5)
+        .setGravityY(1000)
+}
+      
+    
+
+    
+    for (const goomba of this.goombas.children.entries) {
+      goomba.direction = 'LEFT';
+        goomba.isDed = false;
+}  
+   this.collider = this.physics.add.collider(player, this.goombas, this.death, null, this)
+   this.physics.add.collider(this.goombas, platform);
+
+   this.physics.add.collider(this.goombas, platformIce);
+   this.physics.add.collider(this.goombas, platformSnow);
+   this.physics.add.collider(this.goombas, platformMontagne);
+   this.physics.add.collider(this.goombas, this.goombas);
+   
+    ///////////////////////////////////////
+    ////////////picsInvisible////////////////////
+      
+    const picsInvisibleObjects = this.map.getObjectLayer('picsInvisible').objects;
+    this.picsInvisible = this.physics.add.group({
+            immovable: true,
+            allowGravity: false
+        });
+
+    for (const picsInvisible of picsInvisibleObjects) {
+    this.picsInvisible.create(picsInvisible.x+8, picsInvisible.y-3, 'picsInvisible').setScale(0.5).setAlpha(0)
+        .setOrigin(0.5,0.5)
+        .setDepth(-1)
+    }
+
+    for (const picsInvisible of this.picsInvisible.children.entries) {
+    picsInvisible.collider = this.physics.add.collider(picsInvisible, player, this.showPicsInvisible, null, this);
+    
+}      
+      
+      
+          
+     ///////////////////////////////////////
+    ////////////platformInvisible////////////////////
+      
+    const platformInvisibleObjects = this.map.getObjectLayer('platformInvisible').objects;
+    this.platformInvisible = this.physics.add.group({
+            immovable: true,
+            allowGravity: false
+        });
+
+    for (const platformInvisible of platformInvisibleObjects) {
+    this.platformInvisible.create(platformInvisible.x+7, platformInvisible.y-8, 'platformInvisible').setAlpha(0)
+        .setOrigin(0.5,0.5)
+        .setDepth(-1)
+     
+    }
+      
+    for (const platformInvisible of this.platformInvisible.children.entries) {
+    platformInvisible.collider = this.physics.add.collider(platformInvisible, player, this.showPlatformInvisible, null, this);
+    
+}  
+      
+      
+      
+      
+      
+      
+    ///////////////////////////////////////
+    ////////////platformMoving////////////////////
+
+    const platformMovingObjects = this.map.getObjectLayer('platformMoving').objects;
+    this.platformsMoving = this.physics.add.group({
+            immovable: true,
+            allowGravity: false
+        });
+
+    for (const platformMoving of platformMovingObjects) {
+    this.platformsMoving.create(platformMoving.x+7, platformMoving.y-8, 'platformMoving').setScale(0.4)
+        .setOrigin(0.5,0.5)
+        .setDepth(-1)
+     
+    }
+
+    for (const platformMoving of this.platformsMoving.children.entries) {
+        this.physics.add.collider(player, platformMoving, this.playerPlatformMoving, null, this)
+        this.physics.add.collider(platformMoving, platform);
+}    
+      
+
+    ///////////////////////////////////////
+    ////////////platformFalling////////////////////
+
+    const platformFallingObjects = this.map.getObjectLayer('platformFalling').objects;
+    this.platformsFalling = this.physics.add.group({
+            immovable: true,
+            allowGravity: false
+        });
+
+    for (const platformFalling of platformFallingObjects) {
+    this.platformsFalling.create(platformFalling.x+8, platformFalling.y-8, 'platformFalling')
+        .setOrigin(0.5,0.5)
+        .setDepth(-1)
+     
+    }
+
+    for (const platformFalling of this.platformsFalling.children.entries) {
+    platformFalling.collider = this.physics.add.collider(platformFalling, player, this.death, null, this);
+    
+}  
+    ///////////////////////////////////////
+    ////////////water//////////////////////
+
+    const waterObjects = this.map.getObjectLayer('water').objects;
+    this.waters = this.physics.add.group({
+            immovable: true,
+            allowGravity: false
+        });
+
+    for (const water of waterObjects) {
+    this.waters.create(water.x+7, water.y-8, 'water').setScale(0.015)
+        .setOrigin(0.5,0.5)
+        .setDepth(-1)
+     
+    }
+
+    for (const water of this.waters.children.entries) {
+    water.collider = this.physics.add.overlap(water, player, this.playerInWater, null, this); 
+}  
+          ///////////////////////////////////////
+    ////////////waterTop//////////////////////
+
+    const waterTopObjects = this.map.getObjectLayer('waterTop').objects;
+    this.watersTop = this.physics.add.group({
+            immovable: true,
+            allowGravity: false
+        });
+
+    for (const waterTop of waterTopObjects) {
+    this.watersTop.create(waterTop.x+7, waterTop.y-8, 'water').setScale(0.015)
+        .setOrigin(0.5,0.5)
+        .setDepth(-1)
+     
+    }
+
+    for (const waterTop of this.watersTop.children.entries) {
+     waterTop.collider = this.physics.add.overlap(waterTop, player, this.playerInWaterTop, null, this); 
+}  
+    ///////////////////////////////////////
+    ////////////platformFake////////////////////
+
+    const platformFakeObjects = this.map.getObjectLayer('platformFake').objects;
+    this.platformFake = this.physics.add.group({
+            immovable: true,
+            allowGravity: false
+        });
+
+    for (const platformFake of platformFakeObjects) {
+    this.platformFake.create(platformFake.x+8, platformFake.y-8, 'platformFake')
+        .setOrigin(0.5,0.5)
+        .setDepth(-1)
+     
+    }
+
+    for (const platformFake of this.platformFake.children.entries) {
+    platformFake.collider = this.physics.add.overlap(platformFake, player, this.destroyPlatformFake, null, this);
+    
+}  
+      
+    ///////////////////////////////////////
+    ////////////Yeti////////////////////
+
+     const yetiObjects = this.map.getObjectLayer('yeti').objects;
+     this.yetis = this.physics.add.group({
+        immovable: true,
+     });
+
+    for (const yeti of yetiObjects) {
+    this.yetis.create(yeti.x, yeti.y-20, 'yeti')
+        .setOrigin(0.5,0.5)
+        .setDepth(-1)
+        .setGravityY(1000)
+}
+      
+    
+
+    
+    for (const yeti of this.yetis.children.entries) {
+    yeti.collider = this.physics.add.overlap(yeti, player, this.contactYetiJoueur, null, this);
+    yeti.direction = 'RIGHT';
+}  
+   this.physics.add.collider(this.yetis, platform);
+   this.physics.add.collider(this.yetis, platformIce);
+   this.physics.add.collider(this.yetis, platformSnow);
+   this.physics.add.collider(this.yetis, platformMontagne);
+      
+      
+     ///////////////////////////////////////
+    ////////////Snowman////////////////////
+
+     const snowmanObjects = this.map.getObjectLayer('snowman').objects;
+     this.snowmen = this.physics.add.group();
+
+    for (const snowman of snowmanObjects) {
+    this.snowmen.create(snowman.x+snowman.width/2, snowman.y-snowman.height/2, 'snowman').setScale(0.125)
+        .setOrigin(0.5,0.5)
+        .setDepth(-1)
+        .setBounce(1, 1)
+        .setGravityY(1000)
+}
+      
+    
+
+    
+    for (const snowman of this.snowmen.children.entries) {
+    snowman.collider = this.physics.add.overlap(snowman, player, this.degatSnowmanJoueur, null, this);
+
+}  
+        this.physics.add.collider(this.snowmen, platform);
+        this.physics.add.collider(this.snowmen, this.platformsFalling);
+    this.physics.add.collider(this.snowmen, this.snowmen);
+    this.physics.add.collider(this.goombas, this.snowmen);
+  //  this.physics.world.OVERLAP_BIAS = 10000
+
+    ///////////////////////////////////////
+    ////////////Pièces////////////////////
+    
+   const coinObjects = this.map.getObjectLayer('coin').objects;
+     this.coins = this.physics.add.group({
+            immovable: true,
+            allowGravity: false
+        });
+
+    for (const coin of coinObjects) {
+    this.coins.create(coin.x+8, coin.y-9, 'coin').setScale(0.0625)
+        .setOrigin(0.5,0.5)
+        .setDepth(-1);
+}
+      
+    
+
+    
+    for (const coin of this.coins.children.entries) {
+    coin.collider = this.physics.add.overlap(coin, player, this.collectCoin, null, this);
+}
+    
+
+    
+    ///////////////////////////////////////
+    ////////////PowerUpFireball////////////
+    
+    const powerUpFireballObjects = this.map.getObjectLayer('powerUpFireball').objects;
+     this.powerUpFireball = this.physics.add.group({
+            immovable: true,
+            allowGravity: false
+        });
+
+    for (const powerUpFireball of powerUpFireballObjects) {
+    this.powerUpFireball.create(powerUpFireball.x+10, powerUpFireball.y-5,'powerupFireball').setScale(0.075)
+        .setOrigin(0.5,0.5)
+        .setDepth(-1);
+
+}
+        
+    
+    
+    for (const powerUpFireball of this.powerUpFireball.children.entries) {
+    powerUpFireball.collider = this.physics.add.overlap(powerUpFireball, player, this.collectPowerUpFireball, null, this);
+}
+
+    
+     ///////////////////////////////////////
+    ////////////PowerUpHealth////////////
+    if(hardcoreMode=="off"){
+    const powerUpHealthObjects = this.map.getObjectLayer('powerUpHealth').objects;
+     this.powerUpHealth = this.physics.add.group({
+            immovable: true,
+            allowGravity: false
+        });
+
+    for (const powerUpHealth of powerUpHealthObjects) {
+    this.powerUpHealth.create(powerUpHealth.x+8, powerUpHealth.y-10,'powerUpHealth')
+        .setOrigin(0.5,0.5)
+        .setDepth(-1);
+
+}
+        
+    
+    
+    for (const powerUpHealth of this.powerUpHealth.children.entries) {
+    powerUpHealth.collider = this.physics.add.overlap(powerUpHealth, player, this.collectHealthPlayer, null, this);
+}
+    }
+    
+        ///////////////////////////////////////
+        ////////////arrivée////////////////////
+    
+     const flagObjects = this.map.getObjectLayer('flag').objects;
+     this.flag = this.physics.add.group({
+            immovable: true,
+            allowGravity: false
+        });
+
+    for (const flag of flagObjects) {
+    this.flag.create(flag.x+40, flag.y-22, 'flag')
+        .setOrigin(0.5,0.5)
+        .setDepth(-1);
+}
+      
+    
+
+    
+    for (const flag of this.flag.children.entries) {
+    flag.collider = this.physics.add.overlap(flag, player, this.contactDrapeau, null, this);
+}  
+    
+    
+    
+    
+        ///////////////////////////////////////
+        ///////////////////////////////////////
+    
+
+    
+    keyM = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.M);
+    keyZ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Z);
+    keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
+    keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
+    keyQ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q);
+    //  A simple background for our game
+   // this.add.image(400, 300, 'sky');
+
+    //  The platforms group contains the ground and the 2 ledges we can jump on
+   // platforms = this.physics.add.staticGroup();
+
+    //  Here we create the ground.
+    //  Scale it to fit the width of the game (the original sprite is 400x32 in size)
+   // platforms.create(400, 568, 'ground').setScale(2).refreshBody();
+
+    //  Now let's create some ledges
+   // platforms.create(600, 400, 'ground');
+   // platforms.create(50, 250, 'ground');
+   // platforms.create(750, 220, 'ground');
+
+    // The player and its settings
+
+    //  Player physics properties. Give the little guy a slight bounce.
+   
+
+
+
+
+    //  Our player animations, turning, walking left and walking right.
+
+
+    //  Input Events
+    cursors = this.input.keyboard.createCursorKeys();
+
+    //  Some stars to collect, 12 in total, evenly spaced 70 pixels apart along the x axis
+  /*  healthPowerUp = this.physics.add.group({
+        key: 'health',
+        repeat: 0,
+        setXY: { x: Phaser.Math.FloatBetween(4, 1000), y: 0, stepX: Phaser.Math.FloatBetween(4, 1000) }
+    });*/
+
+   /* healthPowerUp.children.iterate(  (child) {
+
+        //  Give each star a slightly different bounce
+        child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
+
+    });*/
+
+    bombs = this.physics.add.group();
+    snowballs = this.physics.add.group();
+
+    
+    fireball = this.physics.add.group();
+    roquettes = this.physics.add.group();
+    //  The score
+
+    
+    //  Collide the player and the stars with the platforms
+
+    //this.physics.add.collider(healthPowerUp, platform);
+    
+    this.physics.add.collider(bombs, platform, this.destroyFireball, null, this);
+    this.physics.add.collider(bombs, platformIce, this.destroyFireball, null, this);
+    this.physics.add.collider(bombs, platformSnow, this.destroyFireball, null, this);
+    this.physics.add.collider(bombs, snowballs, this.destroyFireballSnowball, null, this);
+      
+    this.physics.add.collider(player, this.goomba, this.death, null, this);
+
+
+      
+   // this.physics.add.collider(snowballs, platform, this.destroySnowball, null, this);
+    this.physics.add.overlap(snowballs, player, this.degatSnowballJoueur, null, this);
+
+ //   this.physics.add.collider(fireball, platform);
+    
+ //   this.physics.add.collider(fireball, platformSnow);
+
+
+    //  Checks to see if the player overlaps with any of the stars, if he does call the collectStar  
+ //   this.physics.add.overlap(player,healthPowerUp , collectHealthPlayer, null, this);
+
+    
+    
+    
+    this.physics.add.overlap(this.yetis, bombs, this.killYeti, null, this);
+    this.physics.add.overlap(this.snowmen, bombs, this.killSnowman, null, this);
+    
+    this.physics.add.collider(player, roquettes, this.hitBomb, null, this);
+    
+    this.physics.add.collider(player, platform, this.setSpeedPlatform, null, this);
+      
+    this.physics.add.collider(player, platformMontagne, this.bouncePlatformMontagne, null, this);
+          
+    this.physics.add.collider(player, platformSnow, this.setSpeedPlatformSnow, null, this);
+    this.physics.add.collider(player, platformIce, this.setSpeedPlatformIce, null, this);
+    
+
+}
+
+  update (){
+           /*var pads = this.input.gamepad.gamepads;
+
+    for (var i = 0; i < pads.length; i++)
+    {
+        var gamepad = pads[i];*/
+
+ /*if (!gamepad)
+    {
+        return;
+    }*/
+
+
+      
+      
+      if(playerInWater==true){
+          //standing=true
+          //console.log("InWater")
+          gravity=100
+        player.setGravityY(100)
+      }
+      if(playerInWater==false){
+          gravity=1000
+         player.setGravityY(1000)
+      }
+      
+      
+     
+      
+      
+      
+for (const platformFalling of this.platformsFalling.children.entries) {    
+if(player.x>platformFalling.x && player.x<platformFalling.x+35 && player.y>platformFalling.y){
+    platformFalling.setVelocityY(600)
+}   
+
+}
+      
+      
+      
+      
+/////////////////Bouger goomba//////////////////////
+ for (const goomba of this.goombas.children.entries) {
+        if (goomba.body.blocked.right) {
+            goomba.direction = 'LEFT';
+        }
+
+        if (goomba.body.blocked.left) {
+            goomba.direction = 'RIGHT';
+        }
+
+        if (goomba.direction === 'RIGHT') {
+            goomba.setVelocityX(300);
+        } else {
+            goomba.setVelocityX(-300);
+        }
+
+        !goomba.isDed && goomba.play('goombaRun', true);
+
+    }
+      
+ /*for (const yeti of this.yetis.children.entries) {
+        if (yeti.body.blocked.right) {
+            yeti.direction = 'LEFT';
+        }
+
+        if (yeti.body.blocked.left) {
+            yeti.direction = 'RIGHT';
+        }
+
+        if (yeti.direction === 'RIGHT') {
+            yeti.setVelocityX(150);
+        } else {
+            yeti.setVelocityX(-150);
+        }
+
+
+    }*/
+
+
+for (const platformMoving of this.platformsMoving.children.entries) {
+        if (platformMoving.body.blocked.right) {
+            platformMoving.direction = 'LEFT';
+        }
+
+        if (platformMoving.body.blocked.left) {
+            platformMoving.direction = 'RIGHT';
+        }
+
+        if (platformMoving.direction === 'RIGHT') {
+            platformMoving.setVelocityX(100);
+        } else {
+            platformMoving.setVelocityX(-100);
+        }
+
+      
+
+    }
+
+
+      cooldownSnowball--
+      if(cooldownSnowball<=0){
+                    cooldownSnowball=90
+          this.lancerSnowballYeti();
+
+      }
+       //this.time.delayedCall(1000, this.lancerSnowballSnowman, null, this);
+      
+    
+
+
+
+    // définie le contact du joueur avec un sol
+     //standing = player.body.blocked.down || player.body.touching.down;
+    
+    
+    
+   if( machineGunFireballActive==true){
+       cooldownMachineGunFireball--
+   }
+    if(cooldownMachineGunFireball<1 && machineGunFireballActive==true ){
+      machineGunFireballActive=false;
+      
+        cooldownFireball=120
+      cooldownMachineGunFireball=360
+    }
+    
+    
+    
+    if(fireballPlayer == false){
+     delaiFireballPlayer --
+    }
+    if (delaiFireballPlayer <= 0 && fireballPlayer == false)  // eg, update every 10 seconds
+  {
+    delaiFireballPlayer = cooldownFireball;
+    fireballPlayer = true;
+  }
+    
+         
+
+
+    
+    if (cursors.down.isDown /*|| gamepad.B*/ )
+    {
+        if(fireballPlayer == true && fireballPowerUpActive==true){
+        fireballPlayer = false;
+        this.lancerfireball(player);
+        } 
+    }
+    
+    
+
+    //console.log(fireballPlayer)
+    //console.log(fireballPowerUpActive)
+    
+    
+    
+    if (keyM.isDown && machineGunFireballActive==false && machineGunFireballUses >0)
+    {
+        machineGunFireballActive=true;
+        cooldownFireball=10
+        machineGunFireballUses-=1;
+    } 
+    
+    
+    
+    
+    
+
+    
+    
+    
+    if (keyQ.isDown /*|| gamepad.left*/)
+    {
+        this.goLeft();
+    }
+    if (keyD.isDown /*|| gamepad.right*/)
+    {
+        this.goRight();
+    }
+    
+    
+    
+    
+
+    if(standing==false){
+        jumpingPlayer=true
+    }
+    
+    if (standing==true)
+    {
+        jumpingPlayer=false
+    }
+
+    
+    if (keyZ.isDown && standing == true/*|| gamepad.A*/ )
+    {
+
+        //standing = false;
+        this.jump();
+ 
+    }
+
+    //console.log(standing)
+ /*   
+    if(keyZ.isDown && player.body.blocked.down==false && player.body.blocked.right==true){
+        this.jump();
+        this.bouncePlatformMontagne();
+    }
+
+    if(keyZ.isDown && player.body.blocked.down==false && player.body.blocked.left==true){
+        this.jump();
+        this.bouncePlatformMontagne();
+    }*/
+
+    
+    if (player.body.blocked.down || playerInWater)
+    {
+        standing = true
+    }
+    
+
+    
+    
+    if (keyD.isUp && keyQ.isUp /*&& gamepad.left==false && gamepad.right==false*/ &&  playerCanResetVelocity==true )
+    {
+            
+        player.setVelocityX(0);
+
+        player.anims.play('idle');
+            
+    }
+
+    
+    
+    
+    
+    if (player.y>1000){
+        this.death();
+    }
+    
+    if (froid==1 && machineGunFireballActive==false && hardcoreMode=="on"){
+
+      cooldownFireball=240
+    }
+    
+    if (froid==3){
+        this.death();
+    }
+    
+    }
+ 
+}
+
+
+    
+    
+    
+class Death extends Phaser.Scene {
+
+    constructor () {
+        super('Death');
+    }
+        preload(){
+              this.load.image('deathScreen', 'assets/deathScreen.png');
+        }
+    create() {
+        
+        var gameOverScreen = this.add.image(640, 360, 'deathScreen').setScale(2.2);
+		this.add.text(0.5, 0.5, 'Death')
+      this.time.delayedCall(1500, this.switchDeathToLevel, null, this);
+    }
+    
+    switchDeathToLevel(){
+
+        keyD.reset();
+        keyQ.reset();
+        keyZ.reset();        
+        
+        
+playerInvincible=false;
+ machineGunFireballActive=false,
+ cooldownMachineGunFireball = 360,
+ machineGunFireballUses = 0,
+ cooldownFireball = 120,
+ onPlatform ="",
+ runSpeed = 1,
+ totalCoins=0,
+ jumpingPlayer = true,
+ fireballPowerUpActive = false,
+ fireballPlayer = true ,
+ delaiFireballPlayer = 120,
+    froid = 0,
+gravity =1000,
+playerInWater=false;
+
+        coins=0
+   
+
+          this.scene.start('Jeu');
+        
+    }
+}
+       
+    
+class GameOver extends Phaser.Scene {
+
+    constructor () {
+        super('GameOver');
+    }
+        preload(){
+              this.load.image('gameOverScreen', 'assets/gameOverScreen.jpg');
+        }
+    create() {
+        
+        var gameOverScreen = this.add.image(640, 360, 'gameOverScreen').setScale(2.1);
+		this.add.text(0.5, 0.5, 'GAME OVER')
+      this.time.delayedCall(2000, this.switchGameOverToMenu, null, this);
+    }
+    
+    switchGameOverToMenu(){
+        
+        keyD.reset();
+        keyQ.reset();
+        keyZ.reset(); 
+        playerInvincible=false;
+         machineGunFireballActive=false,
+ cooldownMachineGunFireball = 360,
+ machineGunFireballUses = 0,
+ cooldownFireball = 120,
+ onPlatform ="",
+ runSpeed = 1,
+ totalCoins=0,
+ jumpingPlayer = true,
+ fireballPowerUpActive = false,
+ fireballPlayer = true ,
+ delaiFireballPlayer = 120
+    froid = 0;
+
+        level="level1"
+        viesRestantes=10
+        coins=0
+playerInWater=false
+        froid = 0;
+
+          this.scene.start('Menu');
+        
+    }
+}
+    
+
+    
+class Victoire extends Phaser.Scene {
+
+    constructor () {
+        super('Victoire');
+    }
+        preload(){
+              this.load.image('VictoireScreen', 'assets/victoireScreen.jpg');
+        }
+    create() {
+        
+        var gameOverScreen = this.add.image(600, 400, 'VictoireScreen').setScale(2.5);
+		this.add.text(0.5, 0.5, 'Victoire')
+      this.time.delayedCall(3000, this.switchToWin, null, this);
+    }
+    
+    switchToWin(){
+                keyD.reset();
+        keyQ.reset();
+        keyZ.reset(); 
+          this.scene.start('Menu');
+        
+    }
+}
+  
+    
+    
+    
+    var config = {
+
+    type: Phaser.AUTO,
+    width: 1280,
+    height: 720,
+    backgroundColor: '#538192',
+    pixelArt: true,
+    physics: {
+        default: 'arcade',
+        arcade: {
+            //gravity: { y: 1000 },
+            debug: false,
+            fps: 60
+        },
+    },
+       /* input: {
+            gamepad: true
+        }*/
+    scene: [Menu, Jeu, Death, GameOver, Victoire]
+
+};
+
+
+var level="level1";
+var machineGunFireballActive=false;
+var cooldownMachineGunFireball = 360;
+var machineGunFireballUses = 0;
+var cooldownFireball = 120;
+var onPlatform ="";
+var bomb;
+var snowball;
+var runSpeed = 1;
+var totalCoins=0;
+var player;
+var healthAmount = 100;
+var health;
+var bombs;
+var snowballs;
+var platforms;
+var cursors;
+var snowman;
+var fireball;
+var roquette;
+var scoreText;
+var roquettes;
+var viesRestantes=10;
+var jumpingPlayer = true
+var gravity=1000;
+var fireballPowerUpActive = false
+var fireballPlayer = true
+var cooldownSnowball=90
+var delaiFireballPlayer = 120;
+var standing;
+var keyM
+var keyZ;
+var keyS;
+var keyD;
+var keyQ;
+var coins;
+var playerInvincible=false;
+var playerCanResetVelocity=true;
+var hardcoreMode="off";  
+var playerInWater = false;
+var playerDirection ="right"
+var textPieces;
+var froid1;
+var froid2;
+var froid3;
+var froid = 0;
+var game = new Phaser.Game(config);
+    
+        </script>
+
+</body>
+</html>
