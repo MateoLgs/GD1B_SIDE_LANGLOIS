@@ -720,7 +720,7 @@ class Jeu extends Phaser.Scene{
   }
   delayStart(){
     player.body.setSize(12, 24, true);
-    player.body.setOffset(2,-4);
+    player.body.setOffset(2,0);
 
   }
   preload (){
@@ -748,6 +748,7 @@ class Jeu extends Phaser.Scene{
     this.load.image('snowstorm', 'assets/snowstorm.png');
     this.load.image('water', 'assets/water.png');
     this.load.image('castor', 'assets/castor.png');
+    this.load.image('player1', 'assets/player1.png');
     //this.load.spritesheet('dude1', 'assets/dude1.png', { frameWidth: 32, frameHeight: 48 });    
     this.load.spritesheet('spritesheetYeti', 'assets/spritesheetYeti.png', { frameWidth: 50, frameHeight: 58 });
     this.load.spritesheet('spritesheetPlayer', 'assets/spritesheetPlayer.png', { frameWidth: 12, frameHeight: 24 });
@@ -830,7 +831,7 @@ class Jeu extends Phaser.Scene{
     froid2 = this.physics.add.sprite(600, 180, 'froid').setScrollFactor(0).setScale(0.1).setDepth(1);
     froid3 = this.physics.add.sprite(700, 180, 'froid').setScrollFactor(0).setScale(0.1).setDepth(1);
     }
-    player = this.physics.add.sprite(32, 160, 'atlas').setScale(1.5);
+    player = this.physics.add.sprite(32, 160, 'player1').setScale(1.5);
     player.setGravityY(1000)
 
     player.setCollideWorldBounds(false);
