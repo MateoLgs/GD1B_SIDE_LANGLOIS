@@ -157,7 +157,7 @@ class Jeu extends Phaser.Scene{
    
   lancerfireball(player){
 
-        console.log("lancerFireball")
+         ("lancerFireball")
          var bomb = bombs.create(player.x, player.y-15, 'fireball');
         bomb.setBounce(1);
         bomb.setGravityY(2000)
@@ -219,7 +219,6 @@ class Jeu extends Phaser.Scene{
       platformFake.destroy();
      
       //platformFake.setAlpha(0.2)
-      //console.log("destroy")
   }
     
   showPlatformInvisible(platformInvisble){
@@ -264,12 +263,12 @@ class Jeu extends Phaser.Scene{
     totalCoins+=1;
     textPieces.destroy();
     textPieces = this.add.text(280, 200,  totalCoins,{ fill:'#fff', size:200}).setScrollFactor(0).setDepth(1);  
-      //console.log(totalCoins);
+      // (totalCoins);
 
 }
     
   collectPowerUpFireball(powerUpFireball){
-    console.log("pickupfireball")
+     ("pickupfireball")
     powerUpFireball.destroy();
     /*if(fireballPowerUpActive==true){
         machineGunFireballUses+=1;
@@ -280,7 +279,7 @@ class Jeu extends Phaser.Scene{
   contactDrapeau(){
     
     if(totalCoins>14){
-    console.log(level)   
+     (level)   
     totalCoins=0;
 
     if(level=="level4"){
@@ -462,8 +461,7 @@ class Jeu extends Phaser.Scene{
   }
     
   playerInWaterTop(){
-      /*standing=true
-      console.log("playerinwatertop")*/
+
       runSpeed=1
       gravity=1000
       playerInWater=false
@@ -484,7 +482,7 @@ class Jeu extends Phaser.Scene{
 }
     
   setSpeedPlatformSnow (player, platform) {
-      console.log("test")
+
     playerCanResetVelocity=true
         onPlatform = "snow"
      runSpeed = 0.25;
@@ -504,7 +502,7 @@ class Jeu extends Phaser.Scene{
 }
     
   goRight(){
-      console.log(onPlatform)
+
     if(onPlatform!="ice"){
         if(padConnected){
     if((paddle.left) && onPlatform != "ice"){
@@ -655,7 +653,7 @@ class Jeu extends Phaser.Scene{
   death(){
       if(level!="tutoriel"){
 
-      console.log("Death")
+
       this.input.keyboard.shutdown();
         player.setVelocityX(0);
         player.anims.play('die');
@@ -834,7 +832,7 @@ class Jeu extends Phaser.Scene{
     }
     player = this.physics.add.sprite(32, 160, 'atlas').setScale(1.5);
     player.setGravityY(1000)
-    //console.log("test")
+
     player.setCollideWorldBounds(false);
     this.time.delayedCall(100, this.delayStart, null, this);
     
@@ -1414,8 +1412,7 @@ this.anims.create({
     });
       
       if(playerInWater==true){
-          //standing=true
-          //console.log("InWater")
+
           gravity=100
         player.setGravityY(100)
       }
@@ -1559,9 +1556,7 @@ for (const platformMoving of this.platformsMoving.children.entries) {
     
 
 
-    //console.log(fireballPlayer)
-    //console.log(fireballPowerUpActive)
-    
+
     
     
     if (keyM.isDown && machineGunFireballActive==false && machineGunFireballUses >0)
@@ -1611,7 +1606,7 @@ for (const platformMoving of this.platformsMoving.children.entries) {
  
     }
 
-    //console.log(standing)
+
  /*   
     if(keyZ.isDown && player.body.blocked.down==false && player.body.blocked.right==true){
         this.jump();
