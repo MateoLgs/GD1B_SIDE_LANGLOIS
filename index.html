@@ -133,7 +133,7 @@ class Jeu extends Phaser.Scene{
 
         if(player.x<yeti.x){
         snowball.setVelocity(Phaser.Math.FloatBetween(-200, -400), Phaser.Math.FloatBetween(-200, -400));
-        yeti.anims.play('yetiThrow',true).setFlipX(false).
+        yeti.anims.play('yetiThrow',true).setFlipX(false);
         snowball.setGravityY(1000);
         }
         else if(player.x>yeti.x){
