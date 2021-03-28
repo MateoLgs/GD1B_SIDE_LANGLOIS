@@ -16,6 +16,7 @@ Bugs:
 		❌ Problème d'animation avec la manette
 	❌Le jeu crash lorsqu'une boule de feu arrive, au pixel près, dans un angle aigu
 	❌Animation de mort ne se lance pas 
+	❌Pas de reset de saut dans l'eau
 
 
 Nouveau : 
