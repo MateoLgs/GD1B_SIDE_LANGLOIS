@@ -103,6 +103,16 @@ class Jeu extends Phaser.Scene{
             froid1 = this.physics.add.sprite(500, 180, 'froid').setScrollFactor(0).setScale(0.1).setDepth(1);
             froid2 = this.physics.add.sprite(600, 180, 'froid').setScrollFactor(0).setScale(0.1).setDepth(1);
        }
+       if(froid==0){
+
+        froid1.destroy();
+        froid2.destroy();
+        froid3.destroy();
+        froid1 = this.physics.add.sprite(500, 180, 'froid').setScrollFactor(0).setScale(0.1).setDepth(1);
+        froid2 = this.physics.add.sprite(600, 180, 'froid').setScrollFactor(0).setScale(0.1).setDepth(1);
+        froid3 = this.physics.add.sprite(700, 180, 'froid').setScrollFactor(0).setScale(0.1).setDepth(1);
+}
+
    }
     
   lancerSnowballYeti(yeti){
@@ -161,7 +171,7 @@ class Jeu extends Phaser.Scene{
          var bomb = bombs.create(player.x, player.y-15, 'fireball');
         bomb.setBounce(1);
         bomb.setGravityY(2000)
-    
+
         var directionFireballPlayer = Math.round(Phaser.Math.Between(0,1))
         
         if(keyQ.isDown){
@@ -904,7 +914,7 @@ this.anims.create({
       this.physics.add.collider(player, platformEscalierDroit, this.playerEscalierDroit, null, this);
       this.physics.add.collider(player, platformEscalierGauche, this.playerEscalierGauche, null, this);
       this.physics.add.collider(player, pics, this.death, null, this);
-     
+
 
      //////////////////////////////////////////////
       ///////////////////////////////////////////////
@@ -1370,8 +1380,9 @@ this.anims.create({
     this.physics.add.collider(bombs, platform, this.destroyFireball, null, this);
     this.physics.add.collider(bombs, platformIce, this.destroyFireball, null, this);
     this.physics.add.collider(bombs, platformSnow, this.destroyFireball, null, this);
+    this.physics.add.collider(bombs, this.platformFake, this.destroyFireball, null, this);
     this.physics.add.collider(bombs, snowballs, this.destroyFireballSnowball, null, this);
-      
+    this.physics.add.collider(bombs, pics, this.destroyFireball, null, this);
     this.physics.add.collider(player, this.goomba, this.death, null, this);
 
 
