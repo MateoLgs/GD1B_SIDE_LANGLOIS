@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="1.4.3" orientation="orthogonal" renderorder="right-down" width="206" height="36" tilewidth="16" tileheight="16" infinite="0" nextlayerid="36" nextobjectid="1445">
+<map version="1.4" tiledversion="1.4.2" orientation="orthogonal" renderorder="right-down" width="206" height="36" tilewidth="16" tileheight="16" infinite="0" nextlayerid="36" nextobjectid="1446">
  <editorsettings>
   <export target="level1.json" format="json"/>
  </editorsettings>
  <tileset firstgid="1" name="tileset" tilewidth="16" tileheight="16" tilecount="1147" columns="37">
   <image source="tileset.png" trans="003039" width="594" height="504"/>
  </tileset>
- <tileset firstgid="1148" name="tileset_gutter" tilewidth="16" tileheight="16" tilecount="1147" columns="37">
-  <image source="C:/Phaser_Projet_Spe_Prog/Phaser/assets/tileset_gutter.png" trans="003039" width="594" height="504"/>
+ <tileset firstgid="1148" name="tileset_gutter" tilewidth="16" tileheight="16" tilecount="0" columns="37">
+  <image source="../../../../../../Phaser_Projet_Spe_Prog/Phaser/assets/tileset_gutter.png" trans="003039" width="594" height="504"/>
  </tileset>
  <layer id="34" name="background" width="206" height="36">
   <data encoding="base64">
@@ -50,7 +50,6 @@
   </data>
  </layer>
  <objectgroup id="7" name="flag">
-  <object id="999" gid="467" x="3136" y="384" width="16" height="16"/>
   <object id="1443" gid="506" x="3232" y="528" width="16" height="16"/>
  </objectgroup>
  <objectgroup id="29" name="water">
@@ -399,6 +398,7 @@
   <object id="1439" gid="467" x="1184" y="256" width="16" height="16"/>
   <object id="1440" gid="467" x="1184" y="160" width="16" height="16"/>
   <object id="1441" gid="467" x="1184" y="64" width="16" height="16"/>
+  <object id="1445" gid="467" x="3120" y="384" width="16" height="16"/>
  </objectgroup>
  <objectgroup id="16" name="platformFake">
   <object id="800" gid="734" x="368" y="288" width="16" height="16"/>

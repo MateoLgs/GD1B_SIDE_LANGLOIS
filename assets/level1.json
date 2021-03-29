@@ -128,18 +128,6 @@
          "name":"flag",
          "objects":[
                 {
-                 "gid":467,
-                 "height":16,
-                 "id":999,
-                 "name":"",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":16,
-                 "x":3136,
-                 "y":384
-                }, 
-                {
                  "gid":506,
                  "height":16,
                  "id":1443,
@@ -4236,6 +4224,18 @@
                  "width":16,
                  "x":1184,
                  "y":64
+                }, 
+                {
+                 "gid":467,
+                 "height":16,
+                 "id":1445,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":16,
+                 "x":3120,
+                 "y":384
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -5604,10 +5604,10 @@
          "y":0
         }],
  "nextlayerid":36,
- "nextobjectid":1445,
+ "nextobjectid":1446,
  "orientation":"orthogonal",
  "renderorder":"right-down",
- "tiledversion":"1.4.3",
+ "tiledversion":"1.4.2",
  "tileheight":16,
  "tilesets":[
         {
@@ -5627,13 +5627,13 @@
         {
          "columns":37,
          "firstgid":1148,
-         "image":"C:\/Phaser_Projet_Spe_Prog\/Phaser\/assets\/tileset_gutter.png",
+         "image":"..\/..\/..\/..\/..\/..\/Phaser_Projet_Spe_Prog\/Phaser\/assets\/tileset_gutter.png",
          "imageheight":504,
          "imagewidth":594,
          "margin":0,
          "name":"tileset_gutter",
          "spacing":0,
-         "tilecount":1147,
+         "tilecount":0,
          "tileheight":16,
          "tilewidth":16,
          "transparentcolor":"#003039"
