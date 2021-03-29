@@ -217,8 +217,11 @@ class Jeu extends Phaser.Scene{
         if(bomb.body.blocked.down==false && bomb.body.blocked.up==false){
           bomb.destroy();
         }
-
-
+}  
+destroyFireballPics(bomb){
+      
+          bomb.destroy();
+        
 }  
 
   destroySnowball(snowball){
@@ -1382,7 +1385,7 @@ this.anims.create({
     this.physics.add.collider(bombs, platformSnow, this.destroyFireball, null, this);
     this.physics.add.collider(bombs, this.platformFake, this.destroyFireball, null, this);
     this.physics.add.collider(bombs, snowballs, this.destroyFireballSnowball, null, this);
-    this.physics.add.collider(bombs, pics, this.destroyFireball, null, this);
+    this.physics.add.collider(bombs, pics, this.destroyFireballPics, null, this);
     this.physics.add.collider(player, this.goomba, this.death, null, this);
 
 
@@ -1725,9 +1728,10 @@ class Death extends Phaser.Scene {
               this.load.image('deathScreen', 'assets/deathScreen.png');
         }
     create() {
-        
+        morts+=1
         var gameOverScreen = this.add.image(640, 360, 'deathScreen').setScale(2.2);
-		this.add.text(0.5, 0.5, 'Death')
+		this.add.text(10, 10, 'Morts : ')
+        this.add.text(100, 10, morts)
       this.time.delayedCall(1500, this.switchDeathToLevel, null, this);
     }
     
@@ -1776,9 +1780,11 @@ class GameOver extends Phaser.Scene {
               this.load.image('gameOverScreen', 'assets/gameOverScreen.jpg');
         }
     create() {
-        
+        morts+=1
+
         var gameOverScreen = this.add.image(640, 360, 'gameOverScreen').setScale(2.1);
-		this.add.text(0.5, 0.5, 'GAME OVER')
+        this.add.text(10, 10, 'Morts : ')
+        this.add.text(100, 10, morts)
       this.time.delayedCall(2000, this.switchGameOverToMenu, null, this);
     }
     
@@ -1996,6 +2002,7 @@ var paddle;
 var gamepadStart=true
 var game = new Phaser.Game(config);
 var viesRestantesText 
+var morts = 0
         </script>
 
 </body>
