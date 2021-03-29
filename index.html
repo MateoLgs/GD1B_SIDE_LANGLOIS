@@ -1248,7 +1248,8 @@ this.anims.create({
     
     
     for (const powerUpFireball of this.powerUpFireball.children.entries) {
-    powerUpFireball.collider = this.physics.add.overlap(powerUpFireball, player, this.collectPowerUpFireball, null, this);
+        this.physics.add.collider(powerUpFireball, pics)
+        powerUpFireball.collider = this.physics.add.overlap(powerUpFireball, player, this.collectPowerUpFireball, null, this);
 }
 
     
